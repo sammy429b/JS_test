@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ace Editor with JS Runner</title>
+  
+  <!-- Include Ace Editor from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"></script>
+  
+  <style>
+    /* Style the editor */
+    #editor {
+      height: 400px;
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f1f1f1;
+      border: 1px solid #ccc;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple JavaScript Code Editor with Execution</h1>
+  <div id="editor">console.log('Hello from Ace Editor!');</div>
+  <button id="run_btn">Run Code</button>
+
+  <div id="output"></div>
+
+  <script>
+    // Initialize the Ace editor
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/github"); // Set theme
+    editor.session.setMode("ace/mode/python"); // Set language mode to JavaScript
+
+    // Store the original console.log method
+    const originalLog = console.log;
+
+    // Redirect console.log to output div
+    console.log = function(...args) {
+      const outputDiv = document.getElementById('output');
+      args.forEach(arg => {
+        const logItem = document.createElement('div');
+        logItem.textContent = arg;
+        outputDiv.appendChild(logItem);
+      });
+    };
+
+    // Function to run the code
+    function runCode() {
+      var code = editor.getValue();
+      var outputElement = document.getElementById('output');
+      outputElement.innerHTML = ''; // Clear previous output
+      
+      try {
+        // Create a new function and execute the code
+        var run = new Function(code);
+        run();
+      } catch (error) {
+        // Catch and display errors
+        outputElement.innerHTML = 'Error: ' + error.message;
+        outputElement.style.color = 'red';
+      }
+    }
+
+    document.getElementById("run_btn").addEventListener("click", runCode)
+  </script>
+
+</body>
+</html>
+
+
+echo "# JS_test" >> README.md
+git init
+git add README.md 
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/sammy429b/JS_test.git
+git push -u origin main
